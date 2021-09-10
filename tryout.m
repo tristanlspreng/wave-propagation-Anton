@@ -1,6 +1,6 @@
 % learning
 
-matrix = 1:1:5;
+%% matrix = 1:1:5;
 
 
 
@@ -12,13 +12,13 @@ matrix = 1:1:5;
 % image(avec_abs)
 
 
-AA = [1 4 7 10
-      2 5 8 11
-      3 6 9 12]
+%% AA = [1 4 7 10
+%%      2 5 8 11
+%%      3 6 9 12]
   
-index = [4 1 2 3]
+%% index = [4 1 2 3]
 
-BB = circshift(AA, 1, 2)
+%% BB = circshift(AA, 1, 2)
 
 
 % propagation of the 1000x1000 matrix (i.e. the potential)
