@@ -9,15 +9,15 @@ import matplotlib.pyplot as plt
 
 # parameters
 
-N = 10 #number of rays
+N = 50 #number of rays
 D = 3.086e19 #1000 parsec in meters
 s = 0.5 #ratio of position of screen (0.5 - middle, 0.8 - 0.8 D away from pulsar)
 c0 = 300000000 #light speed in m/s
 wavevector = 2*np.pi/c0 * np.arange(3e8,3.5e8,1e5) #corresponding to frequency of 300MHz (wavelength of 1m)
-timesteps = 600
+timesteps = 500
 
-# velocity = 9.7e-13
-velocity = 5e-12
+# velocity = 9.7e-13 # corresponding to 300 km/s
+velocity = 5e-11 # radians per second
 
 angles_x = np.zeros(N)
 angles_y = np.zeros(N)
@@ -27,17 +27,18 @@ for i in np.arange(N):
     angles_x[i] = np.random.normal(0,5e-7) #generating random angles centered around 0 with standard deviation of 10 mas
     
 for j in np.arange(N):
-    angles_y[j] = np.random.normal(0,5e-7) 
+    angles_y[j] = np.random.normal(0,5e-8) 
     
 amplitudes_2D = []
 
 for k in wavevector:
     
     amplitudes_1D = []
+    angles_x_new = 0
     
     for t in range(timesteps): 
-        angles_x -= velocity
-        paths = D / np.cos(np.sqrt(angles_x**2 + angles_y**2))
+        angles_x_new = angles_x - velocity*t
+        paths = D / np.cos(np.sqrt(angles_x_new**2 + angles_y**2))
         phases = k * paths
         amplitude = np.cos(phases) 
     
@@ -65,6 +66,9 @@ ax.invert_yaxis()
 y_label_list = [300,310,320,330,340,350];
 
 ax.set_yticklabels(y_label_list);
+
+
+
 
 
 
