@@ -13,7 +13,7 @@ velocity = [2e5,2e5] ; total_time = 1801; num_rays = 400;
 kmin=2*pi/3e8; kmax=2.5*pi/3e8;
 
 
-t_array = linspace(1,total_time,total_time)% Time in seconds, create array of time
+t_array = linspace(1,total_time,total_time); % Time in seconds, create array of time
 K_range = linspace(kmin,kmax,length(t_array)); % the Range of wavewector k that pulsar emits
 K_array = 1:length(K_range); % 'Index' for K_range to store k values into arrays
 phi_const = normrnd(0,pi/8,[1,length(num_rays)]); % initialize a set of angles from which the ray is sent
