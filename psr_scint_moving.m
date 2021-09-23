@@ -13,7 +13,7 @@ velocity = [2e5,2e5] ; total_time = 1801; num_rays = 400;
 kmin=2*pi/3e8; kmax=2.5*pi/3e8;
 
 
-t_array = 1:total_time; % Time in seconds, create array of time
+t_array = linspace(1,total_time,total_time)% Time in seconds, create array of time
 K_range = linspace(kmin,kmax,length(t_array)); % the Range of wavewector k that pulsar emits
 K_array = 1:length(K_range); % 'Index' for K_range to store k values into arrays
 phi_const = normrnd(0,pi/8,[1,length(num_rays)]); % initialize a set of angles from which the ray is sent
@@ -30,7 +30,7 @@ for K = K_array
         r01 = (screen_dist - psr_pos(1)) ./ cos(phi); % Distance from pulsar to screen
         r12 = sqrt((r01.*sin(phi) + psr_pos(2))^2 + (observer(1)-screen_dist)^2); % Distance screen to observer
         total_r = r01+r12; % Total distance
-        tot_phase_at_t = exp(1i*K.*total_r); % Phase of the distance at this specific timestep
+        tot_phase_at_t = exp(1i*K_range(K).*total_r); % Phase of the distance at this specific timestep
         phase_array_at_k(K,time_t) = sum(tot_phase_at_t); % Add up all the phases at this time specific timestep: Interference
 
         
