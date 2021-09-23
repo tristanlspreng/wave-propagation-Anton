@@ -42,5 +42,5 @@ end
 
 figure(1)
 surf(real(phase_array_at_k))
-%shading interp
+shading interp
 view(2)
