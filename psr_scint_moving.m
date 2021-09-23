@@ -12,64 +12,35 @@ velocity = [2e5,2e5] ; total_time = 1801; num_rays = 400;
 %kmin=2*pi/(0.37474057*3e8); kmax=2*pi/(0.35269701*3e8);
 kmin=2*pi/3e8; kmax=2.5*pi/3e8;
 
-% psr_pos = [0,0]; screen_dist=50; observer=[100,0]; % [x,y]
-% velocity = [0.001,0.001] ; total_time = 500; num_rays = 400;
-% kmin=1e6; kmax=1.5e6;
 
+t_array = 1:total_time; % Time in seconds, create array of time
+K_range = linspace(kmin,kmax,length(t_array)); % the Range of wavewector k that pulsar emits
+K_array = 1:length(K_range); % 'Index' for K_range to store k values into arrays
+phi_const = normrnd(0,pi/8,[1,length(num_rays)]); % initialize a set of angles from which the ray is sent
 
-% This is at each time
-t_array = 1:total_time;
-K_range = linspace(kmin,kmax,length(t_array));
-K_array = 1:length(K_range);
-phi_const = normrnd(0,pi/8,[1,length(num_rays)]);
-%phi_const = linspace(-pi/8,pi/8,length(num_rays));
-%phi_screen = normrnd(0,pi/1e8,[1,length(num_rays)]);
-phase_array_at_k = zeros(length(K_array),length(t_array));
+phase_array_at_k = zeros(length(K_array),length(t_array)); % This matrix is used to store phase
 for K = K_array
-    psr_pos=[0,0];
+    psr_pos=[0,0]; %The position of pulsar is 'reset' for each k.
+    
     for time_t = t_array
-        psr_pos = psr_pos + velocity*(time_t-1);
-        %phi = normrnd(0,pi/15e-7,[1,length(num_rays)]); % Here, ini ray ang. change every timestep as pulsar moves 
-        phi = phi_const; % Here, the ini ray ang. is constant as pulsar moves
-        r01 = (screen_dist - psr_pos(1)) ./ cos(phi);
-        r12 = sqrt((r01.*sin(phi) + psr_pos(2))^2 + (observer(1)-screen_dist)^2);
-        total_r = r01+r12;
-        tot_phase_at_t = exp(1i*K.*total_r);
-        phase_array_at_k(K,time_t) = sum(tot_phase_at_t);
-        %tot_phase_at_t = exp(1i*K*sum(total_r));
-        %phase_array_at_k(K,time_t) = tot_phase_at_t;
+    
+        psr_pos = psr_pos + velocity*(time_t-1); %update position of pulsar at every timestep
         
-%         for rays = 1:num_rays
-%             phi = normrnd(0,pi/8); % the angle of rays change every timestep as pulsar moves 
-%             r01 = (screen_dist - psr_pos(1)) / cos(phi);
-%             r12 = sqrt((r01*sin(phi) + psr_pos(2))^2 + (observer(1)-screen_dist)^2);
-%             total_r = r01+r12;
-%             %r01_phase = exp(1i*K*r01); r12_phase = exp(1i*K*r12);
-%             tot_phase_at_t = exp(1i*K*total_r);
-%             phase_array_temp(1,rays) = tot_phase_at_t;
-%         end
-        %phase_array_at_k(K,t) = sum(phase_array_temp); % interference of %all paths at time t, For loop
+        phi = phi_const; % Retrieve angle from intially generated angles
+        r01 = (screen_dist - psr_pos(1)) ./ cos(phi); % Distance from pulsar to screen
+        r12 = sqrt((r01.*sin(phi) + psr_pos(2))^2 + (observer(1)-screen_dist)^2); % Distance screen to observer
+        total_r = r01+r12; % Total distance
+        tot_phase_at_t = exp(1i*K.*total_r); % Phase of the distance at this specific timestep
+        phase_array_at_k(K,time_t) = sum(tot_phase_at_t); % Add up all the phases at this time specific timestep: Interference
+
         
     end
     
 end
 
 
-%[X,Y] = meshgrid(t_array,K_range);
-%surf(X,Y,real(phase_array_at_k))
+
 figure(1)
 surf(real(phase_array_at_k))
 %shading interp
 view(2)
-% 
-% figure(2)
-% imshow(phase_array_at_k)
-
-% sz=1;mkr='.';
-% for ks = K_array
-%     figure(2)
-%     scatter(t_array,repelem((2*pi/(K_range(ks))),length(t_array)),sz,real(phase_array_at_k(ks,:)),mkr)
-%     
-%     shading interp
-%     hold on
-% end
