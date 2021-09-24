@@ -1,0 +1,3 @@
+[submodule "branchflowISM"]
+	path = branchflowISM
+	url = https://github.com/jakobtfaber/branchflowISM.git
