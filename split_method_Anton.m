@@ -2,7 +2,7 @@
 
 clear
 
-cmap
+%cmap
 
 % load('Vdistor3.mat');
 % load('z2.mat', 'z2')
